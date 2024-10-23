@@ -366,12 +366,21 @@ const Board = () => {
         onChange={(e) => {
           const file = e.target.files?.[0];
           if (!file) return;
-          getFileJson(file).then((result) => {
-            if (result.data) {
-              validateJSONGame(result.data);
-              setGrid(result.data.grid);
-            }
-          });
+          getFileJson(file)
+            .then((result) => {
+              if (result.data) {
+                try {
+                  validateJSONGame(result.data);
+                  setGrid(result.data.grid);
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                } catch (error: any) {
+                  alert(error.message);
+                }
+              }
+            })
+            .catch((error) => {
+              alert(error);
+            });
         }}
       />
     </div>
